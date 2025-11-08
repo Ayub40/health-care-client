@@ -21,6 +21,7 @@ const registerValidationZodSchema = z.object({
 });
 
 
+// Backend theke register function formData dia send korse tai eta formData hisabe nibo
 export const registerPatient = async (_currentState: any, formData: any): Promise<any> => {
     try {
         console.log(formData.get("address"));
