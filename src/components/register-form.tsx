@@ -8,6 +8,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 
 const RegisterForm = () => {
+    // state ta toast show korar jonno, error show korar jonno use korte hoy
     const [state, formAction, isPending] = useActionState(registerPatient, null);
     console.log(state, "state");
 
