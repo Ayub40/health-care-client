@@ -55,9 +55,7 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
 
         if (setCookieHeaders && setCookieHeaders.length > 0) {
             setCookieHeaders.forEach((cookie: string) => {
-                console.log(cookie, "for each cookie");
                 const parsedCookie = parse(cookie);
-                console.log(parsedCookie, "parsed cookie");
 
                 if (parsedCookie['accessToken']) {
                     accessTokenObject = parsedCookie;
@@ -69,8 +67,6 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
         } else {
             throw new Error("No Set-Cookie header found");
         }
-
-        console.log({ accessTokenObject, refreshTokenObject });
 
         if (!accessTokenObject) {
             throw new Error("Tokens not found in cookies");
@@ -97,9 +93,6 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             path: refreshTokenObject.Path || "/",
             sameSite: refreshTokenObject['SameSite'] || "none",
         });
-
-        // console.log({ res, result });
-
         const verifiedToken: JwtPayload | string = jwt.verify(accessTokenObject.accessToken, process.env.JWT_SECRET as string);
 
         if (typeof verifiedToken === "string") {
