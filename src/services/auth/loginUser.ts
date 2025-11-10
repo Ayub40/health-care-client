@@ -22,6 +22,7 @@ const loginValidationZodSchema = z.object({
 export const loginUser = async (_currentState: any, formData: any): Promise<any> => {
     try {
         const redirectTo = formData.get('redirect') || null;
+        console.log(redirect, "redirect from server action");
         let accessTokenObject: null | any = null;
         let refreshTokenObject: null | any = null;
         const loginData = {
