@@ -52,6 +52,8 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             },
         });
 
+        const result = await res.json();
+
         const setCookieHeaders = res.headers.getSetCookie();
 
         if (setCookieHeaders && setCookieHeaders.length > 0) {
@@ -104,6 +106,11 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
         const userRole: UserRole = verifiedToken.role;
 
 
+        if (!result.success) {
+            throw new Error(result.message || "Login failed");
+        }
+
+
         if (redirectTo) {
             const requestedPath = redirectTo.toString();
             if (isValidRedirectForRole(requestedPath, userRole)) {
@@ -112,6 +119,11 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
                 redirect(getDefaultDashboardRoute(userRole));
             }
         }
+        // 
+        else {
+            redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`);
+        }
+
 
     } catch (error: any) {
         // Re-throw NEXT_REDIRECT errors so Next.js can handle them
