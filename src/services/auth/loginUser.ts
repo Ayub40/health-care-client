@@ -22,7 +22,6 @@ const loginValidationZodSchema = z.object({
 export const loginUser = async (_currentState: any, formData: any): Promise<any> => {
     try {
         const redirectTo = formData.get('redirect') || null;
-        console.log(redirect, "redirect from server action");
         let accessTokenObject: null | any = null;
         let refreshTokenObject: null | any = null;
         const loginData = {
@@ -79,7 +78,6 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             throw new Error("Tokens not found in cookies");
         }
 
-        // const cookieStore = await cookies();
 
         await setCookie("accessToken", accessTokenObject.accessToken, {
             secure: true,
@@ -105,7 +103,6 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
 
         const userRole: UserRole = verifiedToken.role;
 
-
         if (!result.success) {
             throw new Error(result.message || "Login failed");
         }
@@ -114,16 +111,13 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
         if (redirectTo) {
             const requestedPath = redirectTo.toString();
             if (isValidRedirectForRole(requestedPath, userRole)) {
-                redirect(requestedPath);
+                redirect(`${requestedPath}?loggedIn=true`);
             } else {
-                redirect(getDefaultDashboardRoute(userRole));
+                redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`);
             }
-        }
-        // 
-        else {
+        } else {
             redirect(`${getDefaultDashboardRoute(userRole)}?loggedIn=true`);
         }
-
 
     } catch (error: any) {
         // Re-throw NEXT_REDIRECT errors so Next.js can handle them
@@ -131,6 +125,6 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
             throw error;
         }
         console.log(error);
-        return { error: "Login failed" };
+        return { success: false, message: `${process.env.NODE_ENV === 'development' ? error.message : "Login Failed. You might have entered incorrect email or password."}` };
     }
 }
