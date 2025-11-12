@@ -9,3 +9,6 @@ export const logoutUser = async () => {
 
     redirect("/login?loggedOut=true");
 }
+
+// kivave server action theke client e redirect korte hoy
+// server component er search Params theke kivabe query parameter ber korte hoy 
