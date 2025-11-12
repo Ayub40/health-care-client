@@ -5,7 +5,13 @@ const PatientDashboardLayout = ({
 }: {
     children: React.ReactNode;
 }) => {
-    return <div>{children}</div>;
+    return (
+        <div>
+            <h1>Hello World</h1>
+            {children}
+        </div>
+    );
+
 };
 
 export default PatientDashboardLayout;
