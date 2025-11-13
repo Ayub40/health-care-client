@@ -7,7 +7,7 @@ import { NavSection } from "@/types/dashboard.interface";
 import { UserInfo } from "@/types/user.interface";
 import { Bell, Menu, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-// import DashboardMobileSidebar from "./DashboardMobileSidebar";
+import DashboardMobileSidebar from "./DashboardMobileSidebar";
 import UserDropdown from "./UserDropdown";
 
 interface DashboardNavbarContentProps {
@@ -46,13 +46,13 @@ const DashboardNavbarContent = ({
                         </Button>
                     </SheetTrigger>
                     {/* Hide the overlay on medium and larger screens */}
-                    {/* <SheetContent side="left" className="w-64 p-0">
+                    <SheetContent side="left" className="w-64 p-0">
                         <DashboardMobileSidebar
                             userInfo={userInfo}
                             navItems={navItems || []}
                             dashboardHome={dashboardHome || ""}
                         />
-                    </SheetContent> */}
+                    </SheetContent>
                 </Sheet>
 
                 {/* Search Bar */}
