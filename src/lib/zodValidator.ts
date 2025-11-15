@@ -1,5 +1,6 @@
 import { ZodObject } from "zod"
 
+// "schema: ZodObject" eta backend e jevabe deoa hoyche shevabe nite hobe
 export const zodValidator = <T>(payload: T, schema: ZodObject) => {
     const validatedPayload = schema.safeParse(payload)
 
