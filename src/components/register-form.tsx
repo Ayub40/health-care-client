@@ -18,7 +18,7 @@ const RegisterForm = () => {
         }
     }, [state]);
 
-    
+
     return (
         <form action={formAction}>
             <FieldGroup>
@@ -31,13 +31,14 @@ const RegisterForm = () => {
                     </Field>
                     {/* Address */}
                     <Field>
-                        <FieldLabel htmlFor="address">Address</FieldLabel>
+                        <FieldLabel htmlFor="address">Address (Optional)</FieldLabel>
                         <Input
                             id="address"
                             name="address"
                             type="text"
                             placeholder="123 Main St"
                         />
+                        {/* "name" er sathe "field" er name ta milte hobe */}
                         <InputFieldError field="address" state={state} />
                     </Field>
                     {/* Email */}

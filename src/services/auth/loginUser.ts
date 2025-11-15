@@ -31,6 +31,7 @@ export const loginUser = async (_currentState: any, formData: any): Promise<any>
 
         const res = await serverFetch.post("/auth/login", {
             body: JSON.stringify(validatedPayload),
+            // json body send korar somoy content-type header set korte hoy, but formdata er khetre lage na
             headers: {
                 "Content-Type": "application/json",
             }
