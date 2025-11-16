@@ -33,6 +33,7 @@ export async function createDoctor(_prevState: any, formData: FormData) {
             throw new Error("Invalid payload");
         }
 
+        // backend er "user.validation.ts" onujayi data pathano hocche
         const newPayload = {
             password: validatedPayload.password,
             doctor: {
@@ -61,6 +62,7 @@ export async function createDoctor(_prevState: any, formData: FormData) {
         })
 
         const result = await response.json();
+        console.log({ result });
 
 
         return result;
@@ -71,6 +73,7 @@ export async function createDoctor(_prevState: any, formData: FormData) {
     }
 }
 
+// ekhane search, filter, pagination er jonne query string ("queryString") pathano hobe
 export async function getDoctors(queryString?: string) {
     try {
         const response = await serverFetch.get(`/doctor${queryString ? `?${queryString}` : ""}`);
