@@ -20,10 +20,12 @@ interface ISpecialitiesFormDialogProps {
 }
 
 const SpecialitiesFormDialog = ({
+    // Props
     open,
     onClose,
     onSuccess,
 }: ISpecialitiesFormDialogProps) => {
+    // State and Actions ( "createSpeciality" theke data niye aschi )
     const [state, formAction, pending] = useActionState(createSpeciality, null);
 
     useEffect(() => {
