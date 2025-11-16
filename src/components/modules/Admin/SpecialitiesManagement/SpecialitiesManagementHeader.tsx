@@ -13,9 +13,11 @@ const SpecialitiesManagementHeader = () => {
 
     const handleSuccess = () => {
         startTransition(() => {
+            // Refresh the page to reflect the new specialty (full ui ta refresh na hoye silently data ta update hobe)
             router.refresh();
         });
     };
+
     return (
         <>
             <SpecialitiesFormDialog
