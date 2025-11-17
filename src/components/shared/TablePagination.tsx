@@ -53,6 +53,7 @@ const TablePagination = ({ currentPage, totalPages }: TablePaginationProps) => {
                     } else {
                         pageNumber = currentPage - 2 + index;
                     }
+                    
                     return (
                         <Button
                             key={pageNumber}
