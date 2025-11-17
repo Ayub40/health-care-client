@@ -21,8 +21,6 @@ import { ISpecialty } from "@/types/specialities.interface";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 
-
-
 interface IDoctorFormDialogProps {
     open: boolean;
     onClose: () => void;
@@ -52,6 +50,7 @@ const DoctorFormDialog = ({
     );
 
     useEffect(() => {
+        // console.log("Server Response State:", state);
         if (state?.success) {
             toast.success(state.message);
             onSuccess();
