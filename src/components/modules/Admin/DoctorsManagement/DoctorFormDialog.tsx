@@ -60,6 +60,8 @@ const DoctorFormDialog = ({
         null
     );
 
+    console.log(state);
+
     const handleClose = () => {
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
