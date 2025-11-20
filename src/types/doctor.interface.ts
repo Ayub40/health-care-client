@@ -1,4 +1,3 @@
-// egolo backend theke ana hoyse
 
 export interface IDoctor {
     id?: string;
@@ -14,7 +13,9 @@ export interface IDoctor {
     qualification: string;
     currentWorkingPlace: string;
     designation: string;
-    profilePhoto?: string;
+    specialties?: string[];
+    profilePhoto?: File | string;
+    removeSpecialties?: string[];
     isDeleted?: boolean;
     averageRating?: number;
     createdAt?: string;
