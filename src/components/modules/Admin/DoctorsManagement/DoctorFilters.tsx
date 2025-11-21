@@ -5,25 +5,25 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
 } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { useDebounce } from "@/hooks/useDebounce";
 import { ISpecialty } from "@/types/specialities.interface";
@@ -32,253 +32,257 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 
 interface DoctorsFilterProps {
-  specialties: ISpecialty[];
+    specialties: ISpecialty[];
 }
 
 const DoctorFilters = ({ specialties }: DoctorsFilterProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
-  const [open, setOpen] = useState(false);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [isPending, startTransition] = useTransition();
+    const [open, setOpen] = useState(false);
 
-  // ?speciality=Cardiology&speciality=Dermatology
-  const [localSpecialties, setLocalSpecialties] = useState<string[]>(
-    () => searchParams.getAll("specialties") || []
-  );
+    // ?speciality=Cardiology&speciality=Dermatology
+    const [localSpecialties, setLocalSpecialties] = useState<string[]>(
+        () => searchParams.getAll("specialties") || []
+    );
 
-  const [genderInput, setGenderInput] = useState(
-    () => searchParams.get("gender") || ""
-  );
+    const [genderInput, setGenderInput] = useState(
+        () => searchParams.get("gender") || ""
+    );
 
-  const [emailInput, setEmailInput] = useState(
-    () => searchParams.get("email") || ""
-  );
-  
-  const [contactNumberInput, setContactNumberInput] = useState(
-    () => searchParams.get("contactNumber") || ""
-  );
+    const [emailInput, setEmailInput] = useState(
+        () => searchParams.get("email") || ""
+    );
 
-  const debouncedGender = useDebounce(genderInput, 300);
-  const debouncedEmail = useDebounce(emailInput, 500);
-  const debouncedContactNumber = useDebounce(contactNumberInput, 500);
+    const [contactNumberInput, setContactNumberInput] = useState(
+        () => searchParams.get("contactNumber") || ""
+    );
 
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString());
+    const debouncedGender = useDebounce(genderInput, 300);
+    const debouncedEmail = useDebounce(emailInput, 500);
+    const debouncedContactNumber = useDebounce(contactNumberInput, 500);
 
-    // Update debounced fields
-    if (debouncedGender) {
-      params.set("gender", debouncedGender);
-    } else {
-      params.delete("gender");
-    }
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams.toString());
 
-    if (debouncedEmail) {
-      params.set("email", debouncedEmail);
-    } else {
-      params.delete("email");
-    }
+        // Update debounced fields
+        if (debouncedGender) {
+            params.set("gender", debouncedGender);
+        } else {
+            params.delete("gender");
+        }
 
-    if (debouncedContactNumber) {
-      params.set("contactNumber", debouncedContactNumber);
-    } else {
-      params.delete("contactNumber");
-    }
+        if (debouncedEmail) {
+            params.set("email", debouncedEmail);
+        } else {
+            params.delete("email");
+        }
 
-    // Reset to page 1 when filters change
-    params.set("page", "1");
+        if (debouncedContactNumber) {
+            params.set("contactNumber", debouncedContactNumber);
+        } else {
+            params.delete("contactNumber");
+        }
 
-    startTransition(() => {
-      router.push(`?${params.toString()}`);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedGender, debouncedEmail, debouncedContactNumber]);
+        // Reset to page 1 when filters change
+        params.set("page", "1");
 
-  const toggleSpecialty = (specialtyId: string) => {
-    const newSelection = localSpecialties.includes(specialtyId)
-      ? localSpecialties.filter((id) => id !== specialtyId)
-      : [...localSpecialties, specialtyId];
+        startTransition(() => {
+            router.push(`?${params.toString()}`);
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [debouncedGender, debouncedEmail, debouncedContactNumber]);
 
-    setLocalSpecialties(newSelection);
-  };
+    const toggleSpecialty = (specialtyId: string) => {
+        const newSelection = localSpecialties.includes(specialtyId)
+            ? localSpecialties.filter((id) => id !== specialtyId)
+            : [...localSpecialties, specialtyId];
 
-  const applySpecialtyFilter = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("specialties");
-    if (localSpecialties.length > 0) {
-      localSpecialties.forEach((val) => params.append("specialties", val));
-    }
-    params.set("page", "1");
+        setLocalSpecialties(newSelection);
+    };
 
-    startTransition(() => {
-      router.push(`?${params.toString()}`);
-    });
-    setOpen(false);
-  };
+    // Apply specialty filter
+    const applySpecialtyFilter = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("specialties");
+        if (localSpecialties.length > 0) {
+            localSpecialties.forEach((val) => params.append("specialties", val));
+        }
+        params.set("page", "1");
 
-  const clearAllFilters = () => {
-    setGenderInput("");
-    setEmailInput("");
-    setContactNumberInput("");
-    setLocalSpecialties([]);
-    startTransition(() => {
-      router.push(window.location.pathname);
-    });
-  };
+        startTransition(() => {
+            router.push(`?${params.toString()}`);
+        });
+        setOpen(false);
+    };
 
-  const activeFiltersCount =
-    localSpecialties.length +
-    (genderInput ? 1 : 0) +
-    (emailInput ? 1 : 0) +
-    (contactNumberInput ? 1 : 0);
+    // Clear all filters
+    const clearAllFilters = () => {
+        setGenderInput("");
+        setEmailInput("");
+        setContactNumberInput("");
+        setLocalSpecialties([]);
+        startTransition(() => {
+            router.push(window.location.pathname);
+        });
+    };
 
-  return (
-    <div className="space-y-3">
-      {/* Row 1: Search and Refresh */}
-      <div className="flex items-center gap-3">
-        <SearchFilter paramName="searchTerm" placeholder="Search doctors..." />
-        <RefreshButton />
-      </div>
+    //   Count of active filters
+    const activeFiltersCount =
+        localSpecialties.length +
+        (genderInput ? 1 : 0) +
+        (emailInput ? 1 : 0) +
+        (contactNumberInput ? 1 : 0);
 
-      {/* Row 2: Filter Controls */}
-      <div className="flex items-center gap-3">
-        {/* Specialties Multi-Select */}
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              className="w-60 justify-between h-10"
-            >
-              <Filter className="mr-2 h-4 w-4" />
-              {localSpecialties.length > 0
-                ? `${localSpecialties.length} selected`
-                : "Select specialties"}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-60 p-0" align="start">
-            <Command>
-              <CommandInput placeholder="Search specialties..." />
-              <CommandList>
-                <CommandEmpty>No specialty found.</CommandEmpty>
-                <CommandGroup>
-                  {specialties.map((specialty) => {
-                    const isSelected = localSpecialties.includes(
-                      specialty.title
-                    );
-                    return (
-                      <CommandItem
-                        key={specialty.id}
-                        value={specialty.title}
-                        onSelect={() => toggleSpecialty(specialty.title)}
-                        className={isSelected ? "bg-accent" : ""}
-                      >
-                        <Checkbox checked={isSelected} className="mr-2" />
-                        <span className={isSelected ? "font-medium" : ""}>
-                          {specialty.title}
-                        </span>
-                        {isSelected && (
-                          <Check className="ml-auto h-4 w-4 text-primary" />
-                        )}
-                      </CommandItem>
-                    );
-                  })}
-                </CommandGroup>
-              </CommandList>
-              <div className="p-2 border-t">
-                <Button
-                  onClick={applySpecialtyFilter}
-                  className="w-full"
-                  size="sm"
-                  disabled={isPending}
+    return (
+        <div className="space-y-3">
+            {/* Row 1: Search and Refresh */}
+            <div className="flex items-center gap-3">
+                <SearchFilter paramName="searchTerm" placeholder="Search doctors..." />
+                <RefreshButton />
+            </div>
+
+            {/* Row 2: Filter Controls */}
+            <div className="flex items-center gap-3">
+                {/* Specialties Multi-Select */}
+                <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className="w-60 justify-between h-10"
+                        >
+                            <Filter className="mr-2 h-4 w-4" />
+                            {localSpecialties.length > 0
+                                ? `${localSpecialties.length} selected`
+                                : "Select specialties"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-60 p-0" align="start">
+                        <Command>
+                            <CommandInput placeholder="Search specialties..." />
+                            <CommandList>
+                                <CommandEmpty>No specialty found.</CommandEmpty>
+                                <CommandGroup>
+                                    {specialties.map((specialty) => {
+                                        const isSelected = localSpecialties.includes(
+                                            specialty.title
+                                        );
+                                        return (
+                                            <CommandItem
+                                                key={specialty.id}
+                                                value={specialty.title}
+                                                onSelect={() => toggleSpecialty(specialty.title)}
+                                                className={isSelected ? "bg-accent" : ""}
+                                            >
+                                                <Checkbox checked={isSelected} className="mr-2" />
+                                                <span className={isSelected ? "font-medium" : ""}>
+                                                    {specialty.title}
+                                                </span>
+                                                {isSelected && (
+                                                    <Check className="ml-auto h-4 w-4 text-primary" />
+                                                )}
+                                            </CommandItem>
+                                        );
+                                    })}
+                                </CommandGroup>
+                            </CommandList>
+                            <div className="p-2 border-t">
+                                <Button
+                                    onClick={applySpecialtyFilter}
+                                    className="w-full"
+                                    size="sm"
+                                    disabled={isPending}
+                                >
+                                    Apply Filter
+                                </Button>
+                            </div>
+                        </Command>
+                    </PopoverContent>
+                </Popover>
+
+                {/* Gender Filter */}
+                <Select
+                    value={genderInput}
+                    onValueChange={(value) =>
+                        setGenderInput(value === "all" ? "" : value)
+                    }
+                    disabled={isPending}
                 >
-                  Apply Filter
-                </Button>
-              </div>
-            </Command>
-          </PopoverContent>
-        </Popover>
+                    <SelectTrigger className="w-[140px] h-10">
+                        <SelectValue placeholder="Gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All Genders</SelectItem>
+                        <SelectItem value="MALE">Male</SelectItem>
+                        <SelectItem value="FEMALE">Female</SelectItem>
+                    </SelectContent>
+                </Select>
 
-        {/* Gender Filter */}
-        <Select
-          value={genderInput}
-          onValueChange={(value) =>
-            setGenderInput(value === "all" ? "" : value)
-          }
-          disabled={isPending}
-        >
-          <SelectTrigger className="w-[140px] h-10">
-            <SelectValue placeholder="Gender" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Genders</SelectItem>
-            <SelectItem value="MALE">Male</SelectItem>
-            <SelectItem value="FEMALE">Female</SelectItem>
-          </SelectContent>
-        </Select>
+                {/* Email Filter */}
+                <Input
+                    type="email"
+                    placeholder="Email"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    className="w-[200px] h-10"
+                    disabled={isPending}
+                />
 
-        {/* Email Filter */}
-        <Input
-          type="email"
-          placeholder="Email"
-          value={emailInput}
-          onChange={(e) => setEmailInput(e.target.value)}
-          className="w-[200px] h-10"
-          disabled={isPending}
-        />
+                {/* Contact Number Filter */}
+                <Input
+                    type="text"
+                    placeholder="Contact"
+                    value={contactNumberInput}
+                    onChange={(e) => setContactNumberInput(e.target.value)}
+                    className="w-40 h-10"
+                    disabled={isPending}
+                />
 
-        {/* Contact Number Filter */}
-        <Input
-          type="text"
-          placeholder="Contact"
-          value={contactNumberInput}
-          onChange={(e) => setContactNumberInput(e.target.value)}
-          className="w-40 h-10"
-          disabled={isPending}
-        />
+                {/* Clear Filters */}
+                {activeFiltersCount > 0 && (
+                    <Button
+                        variant="ghost"
+                        onClick={clearAllFilters}
+                        disabled={isPending}
+                        className="h-10 px-3"
+                    >
+                        <X className="h-4 w-4 mr-1" />
+                        Clear ({activeFiltersCount})
+                    </Button>
+                )}
+            </div>
 
-        {/* Clear Filters */}
-        {activeFiltersCount > 0 && (
-          <Button
-            variant="ghost"
-            onClick={clearAllFilters}
-            disabled={isPending}
-            className="h-10 px-3"
-          >
-            <X className="h-4 w-4 mr-1" />
-            Clear ({activeFiltersCount})
-          </Button>
-        )}
-      </div>
+            {/* Row 3: Active Specialty Badges - Fixed Height to Prevent Shift */}
 
-      {/* Row 3: Active Specialty Badges - Fixed Height to Prevent Shift */}
-
-      {localSpecialties.length > 0 && (
-        <div className="min-h-8 flex items-center">
-          <div className="flex flex-wrap gap-2">
-            {localSpecialties.map((specialtyTitle) => (
-              <Badge
-                key={specialtyTitle}
-                variant="outline"
-                className="px-2.5 py-1 h-7"
-              >
-                {specialtyTitle}
-                <Button
-                  variant="ghost"
-                  onClick={() => toggleSpecialty(specialtyTitle)}
-                  className="ml-1.5 hover:text-destructive transition-colors"
-                  aria-label={`Remove ${specialtyTitle}`}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </Badge>
-            ))}
-          </div>
+            {localSpecialties.length > 0 && (
+                <div className="min-h-8 flex items-center">
+                    <div className="flex flex-wrap gap-2">
+                        {localSpecialties.map((specialtyTitle) => (
+                            // Badge er moddhe kon kon filter ase ta dekhano hocche
+                            <Badge
+                                key={specialtyTitle}
+                                variant="outline"
+                                className="px-2.5 py-1 h-7"
+                            >
+                                {specialtyTitle}
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => toggleSpecialty(specialtyTitle)}
+                                    className="ml-1.5 hover:text-destructive transition-colors"
+                                    aria-label={`Remove ${specialtyTitle}`}
+                                >
+                                    <X className="h-3 w-3" />
+                                </Button>
+                            </Badge>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default DoctorFilters;
