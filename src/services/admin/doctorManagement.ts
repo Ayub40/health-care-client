@@ -84,6 +84,7 @@ export async function createDoctor(_prevState: any, formData: FormData) {
     newFormData.append("data", JSON.stringify(backendPayload))
     newFormData.append("file", formData.get("file") as Blob)
 
+    // Step 3: Send the FormData to the server
     try {
         const response = await serverFetch.post("/user/create-doctor", {
             body: newFormData,
@@ -119,6 +120,7 @@ export async function getDoctors(queryString?: string) {
     }
 }
 
+// Single doctor details fetch er jonne
 export async function getDoctorById(id: string) {
     try {
         const response = await serverFetch.get(`/doctor/${id}`)
@@ -133,6 +135,7 @@ export async function getDoctorById(id: string) {
     }
 }
 
+// Doctor update function
 export async function updateDoctor(id: string, _prevState: any, formData: FormData) {
     const experienceValue = formData.get("experience");
     const appointmentFeeValue = formData.get("appointmentFee");
@@ -195,6 +198,7 @@ export async function updateDoctor(id: string, _prevState: any, formData: FormDa
         }
     }
 
+    // backend er "user.validation.ts" onujayi data pathano hocche
     try {
         const response = await serverFetch.patch(`/doctor/${id}`, {
             headers: {
@@ -213,6 +217,7 @@ export async function updateDoctor(id: string, _prevState: any, formData: FormDa
     }
 }
 
+// Doctor soft delete function
 export async function softDeleteDoctor(id: string) {
     try {
         const response = await serverFetch.delete(`/doctor/soft/${id}`)
@@ -227,6 +232,8 @@ export async function softDeleteDoctor(id: string) {
         };
     }
 }
+
+// Doctor permanent delete function
 export async function deleteDoctor(id: string) {
     try {
         const response = await serverFetch.delete(`/doctor/${id}`)
