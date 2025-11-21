@@ -41,6 +41,7 @@ const TablePagination = ({ currentPage, totalPages }: TablePaginationProps) => {
         });
     };
 
+    // defult e 10 ta show korbe
     const currentLimit = searchParams.get("limit") || "10";
 
     // if (totalPages <= 1) {
