@@ -19,11 +19,10 @@ const AdminDoctorsManagementPage = async ({
     const doctorsResult = await getDoctors(queryString);
     console.log({ doctorsResult });
 
-    // Calculate total pages for pagination
+    // For Pagination
     const totalPages = Math.ceil(
         (doctorsResult?.meta?.total || 1) / (doctorsResult?.meta?.limit || 1)
     );
-
     return (
         <div className="space-y-6">
             <DoctorsManagementHeader specialities={specialitiesResult?.data || []} />

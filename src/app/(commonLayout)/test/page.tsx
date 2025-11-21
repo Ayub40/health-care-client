@@ -1,7 +1,18 @@
+import { DashboardSkeleton } from "@/components/shared/DashboardSkeleton";
+import HeartbeatLoader from "@/components/shared/HearbeatLoader";
+import { ManagementPageLoading } from "@/components/shared/ManagementPageLoader";
+
 export default function page() {
     return (
         <div>
-            <h1>This is page Component</h1>
+            <DashboardSkeleton />
+            <ManagementPageLoading
+                columns={10}
+                hasActionButton
+                filterCount={5}
+                filterWidths={["w-48", "w-32", "w-40", "w-24", "w-36"]}
+            />
+            <HeartbeatLoader />
         </div>
     );
 }

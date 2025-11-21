@@ -1,7 +1,7 @@
-export default function loader() {
-    return (
-        <div>
-            <h1>This is loader Component</h1>
-        </div>
-    );
-}
+import HeartbeatLoader from "@/components/shared/HearbeatLoader";
+
+const GlobalLoading = () => {
+    return <HeartbeatLoader />;
+};
+
+export default GlobalLoading;
