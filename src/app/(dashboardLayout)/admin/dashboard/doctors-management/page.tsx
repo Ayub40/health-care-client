@@ -1,4 +1,4 @@
-// import DoctorFilters from "@/components/modules/Admin/DoctorsManagement/DoctorFilters";
+import DoctorFilters from "@/components/modules/Admin/DoctorsManagement/DoctorFilters";
 import DoctorsManagementHeader from "@/components/modules/Admin/DoctorsManagement/DoctorsManagementHeader";
 import DoctorsTable from "@/components/modules/Admin/DoctorsManagement/DoctorsTable";
 import TablePagination from "@/components/shared/TablePagination";
@@ -27,7 +27,7 @@ const AdminDoctorsManagementPage = async ({
     return (
         <div className="space-y-6">
             <DoctorsManagementHeader specialities={specialitiesResult?.data || []} />
-            {/* <DoctorFilters specialties={specialitiesResult?.data || []} /> */}
+            <DoctorFilters specialties={specialitiesResult?.data || []} />
             <Suspense fallback={<TableSkeleton columns={10} rows={10} />}>
                 <DoctorsTable
                     doctors={doctorsResult.data}
