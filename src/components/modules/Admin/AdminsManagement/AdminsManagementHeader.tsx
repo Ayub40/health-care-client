@@ -11,6 +11,7 @@ const AdminsManagementHeader = () => {
     const [, startTransition] = useTransition();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+    // Refresh the page after successful admin creation/edit
     const handleSuccess = () => {
         startTransition(() => {
             router.refresh();
