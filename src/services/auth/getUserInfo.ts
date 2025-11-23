@@ -20,6 +20,7 @@ export const getUserInfo = async (): Promise<UserInfo | null> => {
             return null;
         }
 
+        // const userInfo: UserInfo = {
         const userInfo: UserInfo = {
             name: verifiedToken.name || "Unknown User",
             email: verifiedToken.email,
