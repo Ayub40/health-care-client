@@ -9,6 +9,7 @@ import { Input } from "./ui/input";
 
 const LoginForm = ({ redirect }: { redirect?: string }) => {
     const [state, formAction, isPending] = useActionState(loginUser, null);
+    console.log(state);
 
     useEffect(() => {
         if (state && !state.success && state.message) {

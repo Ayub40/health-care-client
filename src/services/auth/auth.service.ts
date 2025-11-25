@@ -78,9 +78,16 @@ export async function resetPassword(_prevState: any, formData: FormData) {
 
         const accessToken = await getCookie("accessToken");
 
+        // console.log("Frontend secret:", process.env.JWT_SECRET);
+        // console.log("TOKEN:", accessToken);
+
         if (!accessToken) {
             throw new Error("User not authenticated");
         }
+
+        // console.log("TOKEN:", accessToken);
+        // console.log("SECRET:", process.env.JWT_SECRET);
+
 
         const verifiedToken = jwt.verify(accessToken as string, process.env.JWT_SECRET!) as jwt.JwtPayload;
 
@@ -181,7 +188,7 @@ export async function getNewAccessToken() {
 
         const result = await response.json();
 
-        console.log("access token refreshed!!");
+        // console.log("access token refreshed!!");
 
         const setCookieHeaders = response.headers.getSetCookie();
 
