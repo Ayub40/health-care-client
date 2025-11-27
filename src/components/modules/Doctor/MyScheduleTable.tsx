@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { myScheduleColumns } from "./myScheduleColumns";
 
 interface MySchedulesTableProps {
+    // Props for the schedules to display
     schedules: IDoctorSchedule[];
 }
 
