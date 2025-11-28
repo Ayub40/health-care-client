@@ -1,4 +1,8 @@
-import ResetPasswordForm from "@/components/ResetPasswordForm";
+// import ResetPasswordForm from "@/components/ResetPasswordForm";
+
+// New Password Import
+import ReusablePasswordForm from "@/components/ReusablePasswordForm";
+import { resetPassword } from "@/services/auth/auth.service";
 
 
 const ResetPasswordPage = async ({
@@ -17,7 +21,10 @@ const ResetPasswordPage = async ({
                         Enter your new password below to reset your account password
                     </p>
                 </div>
-                <ResetPasswordForm redirect={redirect} />
+                {/* <ResetPasswordForm redirect={redirect} /> */}
+
+                {/* New Reusable Password Form  */}
+                <ReusablePasswordForm action={resetPassword} redirect={redirect} />
             </div>
         </div>
     );
