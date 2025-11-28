@@ -3,7 +3,7 @@ import { getDefaultDashboardRoute, isValidRedirectForRole, UserRole } from "@/li
 import { verifyAccessToken } from "@/lib/jwtHanlders";
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
-import { resetPasswordSchema } from "@/zod/auth.validation";
+import { changePasswordSchema, resetPasswordSchema } from "@/zod/auth.validation";
 import { parse } from "cookie";
 import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
@@ -253,4 +253,65 @@ export async function getNewAccessToken() {
         };
     }
 
+}
+
+
+// Change Password
+export async function changePasswordAction(_prevState: any, formData: FormData) {
+    const validationPayload = {
+        oldPassword: formData.get("oldPassword") as string,
+        newPassword: formData.get("newPassword") as string,
+        confirmPassword: formData.get("confirmPassword") as string,
+    };
+
+    // Zod validation
+    const validated = zodValidator(validationPayload, changePasswordSchema);
+
+    if (!validated.success) {
+        return {
+            success: false,
+            message: "Validation error",
+            errors: validated.errors,
+            formData: validationPayload
+        };
+    }
+
+    try {
+        const accessToken = await getCookie("accessToken");
+
+        if (!accessToken) {
+            throw new Error("User not authenticated!");
+        }
+
+        const response = await serverFetch.post("/auth/change-password", {
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                oldPassword: validationPayload.oldPassword,
+                newPassword: validationPayload.newPassword
+            })
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || "Password change failed");
+        }
+
+        revalidateTag("user-info", { expire: 0 });
+
+        return {
+            success: true,
+            message: "Password changed successfully!"
+        };
+
+    } catch (error: any) {
+        return {
+            success: false,
+            message: error?.message || "Something went wrong",
+            formData: validationPayload
+        };
+    }
 }
