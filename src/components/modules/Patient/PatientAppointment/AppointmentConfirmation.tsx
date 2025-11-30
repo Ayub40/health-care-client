@@ -220,10 +220,10 @@ const AppointmentConfirmation = ({
                             <div>
                                 <p className="text-sm text-muted-foreground mb-1">Date</p>
                                 <p className="text-2xl font-bold text-blue-900">
-                                    {format(new Date(schedule.startDateTime), "EEEE")}
+                                    {format(new Date(schedule?.startDateTime), "EEEE")}
                                 </p>
                                 <p className="text-lg text-blue-700">
-                                    {format(new Date(schedule.startDateTime), "MMMM d, yyyy")}
+                                    {format(new Date(schedule?.startDateTime), "MMMM d, yyyy")}
                                 </p>
                             </div>
 
