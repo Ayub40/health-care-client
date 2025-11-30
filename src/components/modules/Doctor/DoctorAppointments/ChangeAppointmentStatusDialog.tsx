@@ -47,6 +47,7 @@ export default function ChangeAppointmentStatusDialog({
         { value: AppointmentStatus.INPROGRESS, label: "In Progress" },
         { value: AppointmentStatus.COMPLETED, label: "Completed" },
         { value: AppointmentStatus.CANCELED, label: "Canceled" },
+        // { value: AppointmentStatus.CANCEL, label: "Canceled" },
     ];
 
     const handleSubmit = async () => {

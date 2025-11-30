@@ -26,8 +26,9 @@ const statusConfig: Record<
         className: "bg-green-500 hover:bg-green-600",
     },
     [AppointmentStatus.CANCELED]: {
+    // [AppointmentStatus.CANCEL]: {
         variant: "destructive",
-        label: "Canceled",
+        label: "Cancel",
     },
 };
 
