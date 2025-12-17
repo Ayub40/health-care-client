@@ -3,7 +3,7 @@ import { getDefaultDashboardRoute, isValidRedirectForRole, UserRole } from "@/li
 import { verifyAccessToken } from "@/lib/jwtHanlders";
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
-import { changePasswordSchema, resetPasswordSchema } from "@/zod/auth.validation";
+import { changePasswordSchema, forgotPasswordSchema, resetPasswordSchema } from "@/zod/auth.validation";
 import { parse } from "cookie";
 import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
@@ -256,42 +256,90 @@ export async function getNewAccessToken() {
 }
 
 
-// Change Password
-export async function changePasswordAction(_prevState: any, formData: FormData) {
+export async function forgotPassword(_prevState: any, formData: FormData) {
+    // Build validation payload
+    const validationPayload = {
+        email: formData.get("email") as string,
+    };
+
+    // Validate
+    const validatedPayload = zodValidator(
+        validationPayload,
+        forgotPasswordSchema
+    );
+
+    if (!validatedPayload.success && validatedPayload.errors) {
+        return {
+            success: false,
+            message: "Validation failed",
+            formData: validationPayload,
+            errors: validatedPayload.errors,
+        };
+    }
+
+    try {
+        // API Call
+        const response = await serverFetch.post("/auth/forgot-password", {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: validationPayload.email,
+            }),
+        });
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message || "Failed to send reset link");
+        }
+
+        return {
+            success: true,
+            message: "Password reset link has been sent to your email!",
+        };
+    } catch (error: any) {
+        return {
+            success: false,
+            message: error?.message || "Something went wrong",
+            formData: validationPayload,
+        };
+    }
+}
+
+export async function changePassword(_prevState: any, formData: FormData) {
+    // Build validation payload
     const validationPayload = {
         oldPassword: formData.get("oldPassword") as string,
         newPassword: formData.get("newPassword") as string,
         confirmPassword: formData.get("confirmPassword") as string,
     };
 
-    // Zod validation
-    const validated = zodValidator(validationPayload, changePasswordSchema);
+    // Validate
+    const validatedPayload = zodValidator(
+        validationPayload,
+        changePasswordSchema
+    );
 
-    if (!validated.success) {
+    if (!validatedPayload.success && validatedPayload.errors) {
         return {
             success: false,
-            message: "Validation error",
-            errors: validated.errors,
-            formData: validationPayload
+            message: "Validation failed",
+            formData: validationPayload,
+            errors: validatedPayload.errors,
         };
     }
 
     try {
-        const accessToken = await getCookie("accessToken");
-
-        if (!accessToken) {
-            throw new Error("User not authenticated!");
-        }
-
+        // API Call
         const response = await serverFetch.post("/auth/change-password", {
             headers: {
-                Authorization: accessToken,
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 oldPassword: validationPayload.oldPassword,
-                newPassword: validationPayload.newPassword
-            })
+                newPassword: validationPayload.newPassword,
+            }),
         });
 
         const result = await response.json();
@@ -300,18 +348,15 @@ export async function changePasswordAction(_prevState: any, formData: FormData) 
             throw new Error(result.message || "Password change failed");
         }
 
-        revalidateTag("user-info", { expire: 0 });
-
         return {
             success: true,
-            message: "Password changed successfully!"
+            message: result.message || "Password changed successfully!",
         };
-
     } catch (error: any) {
         return {
             success: false,
             message: error?.message || "Something went wrong",
-            formData: validationPayload
+            formData: validationPayload,
         };
     }
 }
