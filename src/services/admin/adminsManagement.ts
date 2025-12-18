@@ -127,7 +127,6 @@ export async function getAdminById(id: string) {
     }
 }
 
-
 /**
  * UPDATE ADMIN
  * API: PATCH /admin/:id
@@ -203,6 +202,11 @@ export async function softDeleteAdmin(id: string) {
     try {
         const response = await serverFetch.delete(`/admin/soft/${id}`)
         const result = await response.json();
+        if (result.success) {
+            revalidateTag('admins-list', { expire: 0 });
+            revalidateTag('admins-page-1', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
@@ -221,6 +225,11 @@ export async function deleteAdmin(id: string) {
     try {
         const response = await serverFetch.delete(`/admin/${id}`)
         const result = await response.json();
+        if (result.success) {
+            revalidateTag('admins-list', { expire: 0 });
+            revalidateTag('admins-page-1', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
