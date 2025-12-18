@@ -104,7 +104,12 @@ export async function getAdmins(queryString?: string) {
  */
 export async function getAdminById(id: string) {
     try {
-        const response = await serverFetch.get(`/admin/${id}`)
+        const response = await serverFetch.get(`/admin/${id}`, {
+            next: {
+                tags: [`admin-${id}`, "admins-list"],
+                revalidate: 180, // more responsive admin profile updates
+            }
+        });
         const result = await response.json();
         return result;
     } catch (error: any) {
@@ -115,6 +120,7 @@ export async function getAdminById(id: string) {
         };
     }
 }
+
 
 /**
  * UPDATE ADMIN
