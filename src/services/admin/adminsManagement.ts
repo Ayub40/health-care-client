@@ -4,6 +4,7 @@
 import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { createAdminZodSchema, updateAdminZodSchema } from "@/zod/admin.validation";
+import { revalidateTag } from "next/cache";
 
 /**
  * CREATE ADMIN
@@ -57,6 +58,11 @@ export async function createAdmin(_prevState: any, formData: FormData) {
         });
 
         const result = await response.json();
+        if (result.success) {
+            revalidateTag('admins-list', { expire: 0 });
+            revalidateTag('admins-page-1', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.error("Create admin error:", error);
@@ -173,6 +179,11 @@ export async function updateAdmin(id: string, _prevState: any, formData: FormDat
         });
 
         const result = await response.json();
+        if (result.success) {
+            revalidateTag('admins-list', { expire: 0 });
+            revalidateTag('admins-page-1', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.error("Update admin error:", error);
