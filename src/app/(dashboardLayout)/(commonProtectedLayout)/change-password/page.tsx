@@ -2,7 +2,7 @@
 
 // New Import
 import ReusablePasswordForm from "@/components/ReusablePasswordForm";
-import { changePasswordAction } from "@/services/auth/auth.service";
+import { changePassword } from "@/services/auth/auth.service";
 
 const ChangePasswordPage = async ({
     searchParams,
@@ -23,7 +23,7 @@ const ChangePasswordPage = async ({
                 {/* <ChangePasswordForm redirect={redirect} /> */}
 
                 {/* New */}
-                <ReusablePasswordForm action={changePasswordAction} includeOldPassword={true} redirect={redirect} />
+                <ReusablePasswordForm action={changePassword} includeOldPassword={true} redirect={redirect} />
             </div>
         </div>
     );
