@@ -36,7 +36,6 @@ export async function getPatients(queryString?: string) {
     }
 }
 
-
 /**
  * GET PATIENT BY ID
  * API: GET /patient/:id
@@ -59,7 +58,6 @@ export async function getPatientById(id: string) {
         };
     }
 }
-
 
 /**
  * UPDATE PATIENT
@@ -112,6 +110,51 @@ export async function updatePatient(id: string, _prevState: any, formData: FormD
             success: false,
             message: process.env.NODE_ENV === 'development' ? error.message : 'Failed to update patient',
             formData: validationPayload
+        };
+    }
+}
+
+
+/**
+ * SOFT DELETE PATIENT
+ * API: DELETE /patient/soft/:id
+ */
+export async function softDeletePatient(id: string) {
+    try {
+        const response = await serverFetch.delete(`/patient/soft/${id}`)
+        const result = await response.json();
+        if (result.success) {
+            revalidateTag('patients-list', { expire: 0 });
+            revalidateTag(`patient-${id}`, { expire: 0 });
+        }
+        return result;
+    } catch (error: any) {
+        console.log(error);
+        return {
+            success: false,
+            message: `${process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'}`
+        };
+    }
+}
+
+/**
+ * HARD DELETE PATIENT
+ * API: DELETE /patient/:id
+ */
+export async function deletePatient(id: string) {
+    try {
+        const response = await serverFetch.delete(`/patient/${id}`)
+        const result = await response.json();
+        if (result.success) {
+            revalidateTag('patients-list', { expire: 0 });
+            revalidateTag(`patient-${id}`, { expire: 0 });
+        }
+        return result;
+    } catch (error: any) {
+        console.log(error);
+        return {
+            success: false,
+            message: `${process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'}`
         };
     }
 }
