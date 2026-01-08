@@ -33,3 +33,26 @@ export async function getPatients(queryString?: string) {
     }
 }
 
+
+/**
+ * GET PATIENT BY ID
+ * API: GET /patient/:id
+ */
+export async function getPatientById(id: string) {
+    try {
+        const response = await serverFetch.get(`/patient/${id}`, {
+            next: {
+                tags: [`patient-${id}`, "patients-list"],
+                revalidate: 180, // more responsive patient profile updates
+            }
+        })
+        const result = await response.json();
+        return result;
+    } catch (error: any) {
+        console.log(error);
+        return {
+            success: false,
+            message: `${process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'}`
+        };
+    }
+}
