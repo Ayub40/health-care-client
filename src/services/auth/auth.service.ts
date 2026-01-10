@@ -58,7 +58,9 @@ export async function resetPassword(_prevState: any, formData: FormData) {
     const email = formData.get("email") as string;
     const token = formData.get("token") as string;
 
-    
+
+
+
     // Build validation payload
     const validationPayload = {
         newPassword: formData.get("newPassword") as string,

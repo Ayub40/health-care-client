@@ -5,6 +5,7 @@ import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { IDoctor } from "@/types/doctor.interface";
 import { createDoctorZodSchema, updateDoctorZodSchema } from "@/zod/doctors.validation";
+import { revalidateTag } from "next/cache";
 
 export async function createDoctor(_prevState: any, formData: FormData) {
 
@@ -59,8 +60,6 @@ export async function createDoctor(_prevState: any, formData: FormData) {
             formData: validationPayload,
         }
     }
-
-    // backend er "user.validation.ts" onujayi data pathano hocche
     const backendPayload = {
         password: validatedPayload.data.password,
         doctor: {
@@ -78,13 +77,10 @@ export async function createDoctor(_prevState: any, formData: FormData) {
             specialties: validatedPayload.data.specialties,
         }
     };
-
-    // Step 2: Create FormData to send both JSON data and file
     const newFormData = new FormData()
     newFormData.append("data", JSON.stringify(backendPayload))
     newFormData.append("file", formData.get("file") as Blob)
 
-    // Step 3: Send the FormData to the server
     try {
         const response = await serverFetch.post("/user/create-doctor", {
             body: newFormData,
@@ -92,7 +88,13 @@ export async function createDoctor(_prevState: any, formData: FormData) {
 
         const result = await response.json();
 
-
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
@@ -108,7 +110,20 @@ export async function createDoctor(_prevState: any, formData: FormData) {
 // ekhane search, filter, pagination er jonne query string ("queryString") pathano hobe
 export async function getDoctors(queryString?: string) {
     try {
-        const response = await serverFetch.get(`/doctor${queryString ? `?${queryString}` : ""}`);
+        const searchParams = new URLSearchParams(queryString);
+        const page = searchParams.get("page") || "1";
+        const searchTerm = searchParams.get("searchTerm") || "all";
+        const response = await serverFetch.get(`/doctor${queryString ? `?${queryString}` : ""}`,
+            {
+                next: {
+                    tags: [
+                        "doctors-list",
+                        `doctors-page-${page}`,
+                        `doctors-search-${searchTerm}`,
+                    ],
+                    revalidate: 180, // faster doctor list updates
+                },
+            });
         const result = await response.json();
         return result;
     } catch (error: any) {
@@ -123,7 +138,13 @@ export async function getDoctors(queryString?: string) {
 // Single doctor details fetch er jonne
 export async function getDoctorById(id: string) {
     try {
-        const response = await serverFetch.get(`/doctor/${id}`)
+        const response = await serverFetch.get(`/doctor/${id}`, {
+            next: {
+                tags: [`doctor-${id}`, "doctors-list"],
+                // Reduced to 180s for more responsive doctor profile updates
+                revalidate: 180,
+            }
+        })
         const result = await response.json();
         return result;
     } catch (error: any) {
@@ -198,7 +219,6 @@ export async function updateDoctor(id: string, _prevState: any, formData: FormDa
         }
     }
 
-    // backend er "user.validation.ts" onujayi data pathano hocche
     try {
         const response = await serverFetch.patch(`/doctor/${id}`, {
             headers: {
@@ -207,6 +227,14 @@ export async function updateDoctor(id: string, _prevState: any, formData: FormDa
             body: JSON.stringify(validatedPayload.data),
         })
         const result = await response.json();
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag(`doctor-${id}`, { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
@@ -222,7 +250,14 @@ export async function softDeleteDoctor(id: string) {
     try {
         const response = await serverFetch.delete(`/doctor/soft/${id}`)
         const result = await response.json();
-
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag(`doctor-${id}`, { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
@@ -238,7 +273,14 @@ export async function deleteDoctor(id: string) {
     try {
         const response = await serverFetch.delete(`/doctor/${id}`)
         const result = await response.json();
-
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag(`doctor-${id}`, { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
