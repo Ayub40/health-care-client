@@ -114,7 +114,6 @@ export async function updatePatient(id: string, _prevState: any, formData: FormD
     }
 }
 
-
 /**
  * SOFT DELETE PATIENT
  * API: DELETE /patient/soft/:id

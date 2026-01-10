@@ -138,7 +138,13 @@ export async function getDoctors(queryString?: string) {
 // Single doctor details fetch er jonne
 export async function getDoctorById(id: string) {
     try {
-        const response = await serverFetch.get(`/doctor/${id}`)
+        const response = await serverFetch.get(`/doctor/${id}`, {
+            next: {
+                tags: [`doctor-${id}`, "doctors-list"],
+                // Reduced to 180s for more responsive doctor profile updates
+                revalidate: 180,
+            }
+        })
         const result = await response.json();
         return result;
     } catch (error: any) {
@@ -213,7 +219,6 @@ export async function updateDoctor(id: string, _prevState: any, formData: FormDa
         }
     }
 
-    // backend er "user.validation.ts" onujayi data pathano hocche
     try {
         const response = await serverFetch.patch(`/doctor/${id}`, {
             headers: {
@@ -222,6 +227,14 @@ export async function updateDoctor(id: string, _prevState: any, formData: FormDa
             body: JSON.stringify(validatedPayload.data),
         })
         const result = await response.json();
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag(`doctor-${id}`, { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
