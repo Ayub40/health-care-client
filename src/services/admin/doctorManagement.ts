@@ -250,7 +250,14 @@ export async function softDeleteDoctor(id: string) {
     try {
         const response = await serverFetch.delete(`/doctor/soft/${id}`)
         const result = await response.json();
-
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag(`doctor-${id}`, { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
@@ -266,7 +273,14 @@ export async function deleteDoctor(id: string) {
     try {
         const response = await serverFetch.delete(`/doctor/${id}`)
         const result = await response.json();
-
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag(`doctor-${id}`, { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
