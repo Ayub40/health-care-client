@@ -5,6 +5,7 @@ import { serverFetch } from "@/lib/server-fetch";
 import { zodValidator } from "@/lib/zodValidator";
 import { IDoctor } from "@/types/doctor.interface";
 import { createDoctorZodSchema, updateDoctorZodSchema } from "@/zod/doctors.validation";
+import { revalidateTag } from "next/cache";
 
 export async function createDoctor(_prevState: any, formData: FormData) {
 
@@ -59,8 +60,6 @@ export async function createDoctor(_prevState: any, formData: FormData) {
             formData: validationPayload,
         }
     }
-
-    // backend er "user.validation.ts" onujayi data pathano hocche
     const backendPayload = {
         password: validatedPayload.data.password,
         doctor: {
@@ -78,13 +77,10 @@ export async function createDoctor(_prevState: any, formData: FormData) {
             specialties: validatedPayload.data.specialties,
         }
     };
-
-    // Step 2: Create FormData to send both JSON data and file
     const newFormData = new FormData()
     newFormData.append("data", JSON.stringify(backendPayload))
     newFormData.append("file", formData.get("file") as Blob)
 
-    // Step 3: Send the FormData to the server
     try {
         const response = await serverFetch.post("/user/create-doctor", {
             body: newFormData,
@@ -92,7 +88,13 @@ export async function createDoctor(_prevState: any, formData: FormData) {
 
         const result = await response.json();
 
-
+        if (result.success) {
+            revalidateTag('doctors-list', { expire: 0 });
+            revalidateTag('doctors-page-1', { expire: 0 });
+            revalidateTag('doctors-search-all', { expire: 0 });
+            revalidateTag('admin-dashboard-meta', { expire: 0 });
+            revalidateTag('doctor-dashboard-meta', { expire: 0 });
+        }
         return result;
     } catch (error: any) {
         console.log(error);
