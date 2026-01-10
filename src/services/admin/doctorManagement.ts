@@ -110,7 +110,20 @@ export async function createDoctor(_prevState: any, formData: FormData) {
 // ekhane search, filter, pagination er jonne query string ("queryString") pathano hobe
 export async function getDoctors(queryString?: string) {
     try {
-        const response = await serverFetch.get(`/doctor${queryString ? `?${queryString}` : ""}`);
+        const searchParams = new URLSearchParams(queryString);
+        const page = searchParams.get("page") || "1";
+        const searchTerm = searchParams.get("searchTerm") || "all";
+        const response = await serverFetch.get(`/doctor${queryString ? `?${queryString}` : ""}`,
+            {
+                next: {
+                    tags: [
+                        "doctors-list",
+                        `doctors-page-${page}`,
+                        `doctors-search-${searchTerm}`,
+                    ],
+                    revalidate: 180, // faster doctor list updates
+                },
+            });
         const result = await response.json();
         return result;
     } catch (error: any) {
