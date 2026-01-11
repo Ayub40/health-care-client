@@ -1,6 +1,7 @@
 "use client";
+
 import { loginUser } from "@/services/auth/loginUser";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import InputFieldError from "./shared/InputFieldError";
 import { Button } from "./ui/button";
@@ -9,13 +10,34 @@ import { Input } from "./ui/input";
 
 const LoginForm = ({ redirect }: { redirect?: string }) => {
     const [state, formAction, isPending] = useActionState(loginUser, null);
-    console.log(state);
+
+    // added (minimal)
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     useEffect(() => {
         if (state && !state.success && state.message) {
             toast.error(state.message);
         }
     }, [state]);
+
+    // added (minimal)
+    const handleRoleLogin = (role: "PATIENT" | "DOCTOR" | "ADMIN") => {
+        if (role === "PATIENT") {
+            setEmail(process.env.NEXT_PUBLIC_PATIENT_EMAIL || "");
+            setPassword(process.env.NEXT_PUBLIC_PATIENT_PASSWORD || "");
+        }
+
+        if (role === "DOCTOR") {
+            setEmail(process.env.NEXT_PUBLIC_DOCTOR_EMAIL || "");
+            setPassword(process.env.NEXT_PUBLIC_DOCTOR_PASSWORD || "");
+        }
+
+        if (role === "ADMIN") {
+            setEmail(process.env.NEXT_PUBLIC_ADMIN_EMAIL || "");
+            setPassword(process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "");
+        }
+    };
 
     return (
         <form action={formAction}>
@@ -30,9 +52,9 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
                             name="email"
                             type="email"
                             placeholder="m@example.com"
-                        //   required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
-
                         <InputFieldError field="email" state={state} />
                     </Field>
 
@@ -44,16 +66,46 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
                             name="password"
                             type="password"
                             placeholder="Enter your password"
-                        //   required
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         <InputFieldError field="password" state={state} />
                     </Field>
                 </div>
+
                 <FieldGroup className="mt-4">
                     <Field>
                         <Button type="submit" disabled={isPending}>
                             {isPending ? "Logging in..." : "Login"}
                         </Button>
+
+
+                        {/* Role buttons */}
+                        <div className="flex gap-3 mb-6 mx-auto justify-center">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => handleRoleLogin("PATIENT")}
+                            >
+                                Patient
+                            </Button>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => handleRoleLogin("DOCTOR")}
+                            >
+                                Doctor
+                            </Button>
+
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => handleRoleLogin("ADMIN")}
+                            >
+                                Admin
+                            </Button>
+                        </div>
 
                         <FieldDescription className="px-6 text-center">
                             Don&apos;t have an account?{" "}
@@ -61,6 +113,7 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
                                 Sign up
                             </a>
                         </FieldDescription>
+
                         <FieldDescription className="px-6 text-center">
                             <a
                                 href="/forget-password"
@@ -72,8 +125,101 @@ const LoginForm = ({ redirect }: { redirect?: string }) => {
                     </Field>
                 </FieldGroup>
             </FieldGroup>
+
         </form>
     );
 };
 
 export default LoginForm;
+
+
+
+
+
+
+
+
+
+
+
+
+
+// "use client";
+// import { loginUser } from "@/services/auth/loginUser";
+// import { useActionState, useEffect } from "react";
+// import { toast } from "sonner";
+// import InputFieldError from "./shared/InputFieldError";
+// import { Button } from "./ui/button";
+// import { Field, FieldDescription, FieldGroup, FieldLabel } from "./ui/field";
+// import { Input } from "./ui/input";
+
+// const LoginForm = ({ redirect }: { redirect?: string }) => {
+//     const [state, formAction, isPending] = useActionState(loginUser, null);
+//     console.log(state);
+
+//     useEffect(() => {
+//         if (state && !state.success && state.message) {
+//             toast.error(state.message);
+//         }
+//     }, [state]);
+
+//     return (
+//         <form action={formAction}>
+//             {redirect && <input type="hidden" name="redirect" value={redirect} />}
+//             <FieldGroup>
+//                 <div className="grid grid-cols-1 gap-4">
+//                     {/* Email */}
+//                     <Field>
+//                         <FieldLabel htmlFor="email">Email</FieldLabel>
+//                         <Input
+//                             id="email"
+//                             name="email"
+//                             type="email"
+//                             placeholder="m@example.com"
+//                         //   required
+//                         />
+
+//                         <InputFieldError field="email" state={state} />
+//                     </Field>
+
+//                     {/* Password */}
+//                     <Field>
+//                         <FieldLabel htmlFor="password">Password</FieldLabel>
+//                         <Input
+//                             id="password"
+//                             name="password"
+//                             type="password"
+//                             placeholder="Enter your password"
+//                         //   required
+//                         />
+//                         <InputFieldError field="password" state={state} />
+//                     </Field>
+//                 </div>
+//                 <FieldGroup className="mt-4">
+//                     <Field>
+//                         <Button type="submit" disabled={isPending}>
+//                             {isPending ? "Logging in..." : "Login"}
+//                         </Button>
+
+//                         <FieldDescription className="px-6 text-center">
+//                             Don&apos;t have an account?{" "}
+//                             <a href="/register" className="text-blue-600 hover:underline">
+//                                 Sign up
+//                             </a>
+//                         </FieldDescription>
+//                         <FieldDescription className="px-6 text-center">
+//                             <a
+//                                 href="/forget-password"
+//                                 className="text-blue-600 hover:underline"
+//                             >
+//                                 Forgot password?
+//                             </a>
+//                         </FieldDescription>
+//                     </Field>
+//                 </FieldGroup>
+//             </FieldGroup>
+//         </form>
+//     );
+// };
+
+// export default LoginForm;
