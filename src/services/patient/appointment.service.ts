@@ -71,7 +71,7 @@ export async function getMyAppointments(queryString?: string) {
             `/appointment/my-appointment${queryString ? `?${queryString}` : "?sortBy=createdAt&sortOrder=desc"}`, {
             next: {
                 tags: ["my-appointments"],
-                revalidate: 5,
+                revalidate: 120,
             },
         }
         );
