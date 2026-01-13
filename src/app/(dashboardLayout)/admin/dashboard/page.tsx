@@ -9,7 +9,12 @@ import { Suspense } from "react";
 async function AdminDashboardContent() {
     const result = await getDashboardMetaData();
 
-    const data: IAdminDashboardMeta = result.data;
+    const data: IAdminDashboardMeta = result?.data;
+
+    // New Add
+    // if (!data) {
+    //     return <div className="p-4 text-center">No dashboard data available.</div>;
+    // }
 
     const totalRevenue = data.totalRevenue?._sum?.amount || 0;
 
