@@ -146,7 +146,6 @@ export async function resetPassword(_prevState: any, formData: FormData) {
     }
 }
 
-
 export async function getNewAccessToken() {
     try {
         const accessToken = await getCookie("accessToken");
