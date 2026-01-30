@@ -11,9 +11,9 @@ export const metadata = {
 export default function NGOPage() {
     return (
         <main className="min-h-screen bg-white">
-            {/* NGO Hero Section with Hero-style Gradient */}
+           
             <section className="w-full relative overflow-hidden rounded-b-[40px]">
-                {/* Radial Gradient Background matching the main Hero */}
+              
                 <div
                     className="absolute inset-0 z-0"
                     style={{
@@ -76,7 +76,7 @@ export default function NGOPage() {
                 </div>
             </section>
 
-            {/* Main NGO Listing Component */}
+         
             <section className="py-12 bg-white">
                 <NGOList />
             </section>
