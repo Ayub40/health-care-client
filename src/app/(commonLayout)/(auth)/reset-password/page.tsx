@@ -1,17 +1,18 @@
-// import ResetPasswordForm from "@/components/ResetPasswordForm";
+// import ReusablePasswordForm from "@/components/ReusablePasswordForm";
+//  <ReusablePasswordForm action={resetPassword} redirect={redirect} />
 
-// New Password Import
-import ReusablePasswordForm from "@/components/ReusablePasswordForm";
-import { resetPassword } from "@/services/auth/auth.service";
-
+import ResetPasswordForm from "@/components/ResetPasswordForm";
 
 const ResetPasswordPage = async ({
     searchParams,
 }: {
-    searchParams?: Promise<{ redirect?: string }>;
+    searchParams?: Promise<{ redirect?: string; email?: string; token?: string }>;
 }) => {
     const params = (await searchParams) || {};
-    const redirect = params.redirect;
+    const { redirect, email, token } = params;
+    console.log({ email, token }, "params");
+
+
     return (
         <div className="flex min-h-screen items-center justify-center">
             <div className="w-full max-w-md space-y-6 rounded-lg border p-8 shadow-lg">
@@ -21,13 +22,11 @@ const ResetPasswordPage = async ({
                         Enter your new password below to reset your account password
                     </p>
                 </div>
-                {/* <ResetPasswordForm redirect={redirect} /> */}
-
-                {/* New Reusable Password Form  */}
-                <ReusablePasswordForm action={resetPassword} redirect={redirect} />
+                <ResetPasswordForm redirect={redirect} email={email} token={token} />
             </div>
         </div>
     );
 };
 
 export default ResetPasswordPage;
+
