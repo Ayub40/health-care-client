@@ -1,74 +1,171 @@
-import React from 'react';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import {
+    Activity,
+    Bone,
+    Brain,
+    FileText,
+    Heart,
+    Microscope,
+} from "lucide-react";
+import Link from "next/link";
 
-const diagnosticCenters = [
-    {
-        id: 1,
-        name: "LifeCare Diagnostic Center",
-        location: "Dhanmondi, Dhaka",
-        services: ["Blood Test", "X-Ray", "MRI"],
-        contact: "+8801700000000",
-        rating: 4.8
-    },
-    {
-        id: 2,
-        name: "Popular Medical Services",
-        location: "Chittagong City",
-        services: ["ECG", "Ultrasonography", "CT Scan"],
-        contact: "+8801800000000",
-        rating: 4.5
-    },
-    {
-        id: 3,
-        name: "City Health Lab",
-        location: "Sylhet Sadar",
-        services: ["Dental X-ray", "Health Checkup", "Biopsy"],
-        contact: "+8801900000000",
-        rating: 4.2
-    }
-];
+export const dynamic = "force-static";
 
-export default function DiagnosticsPage() {
+const DiagnosticsPage = () => {
+    const services = [
+        {
+            icon: Activity,
+            title: "Blood Tests",
+            description: "Complete blood count, lipid profile, diabetes screening",
+            tests: "50+ tests available",
+        },
+        {
+            icon: Heart,
+            title: "Cardiac Tests",
+            description: "ECG, Echo, stress tests, and cardiac markers",
+            tests: "15+ tests available",
+        },
+        {
+            icon: Brain,
+            title: "Imaging",
+            description: "X-Ray, MRI, CT Scan, Ultrasound",
+            tests: "20+ tests available",
+        },
+        {
+            icon: Microscope,
+            title: "Pathology",
+            description: "Urine, stool, culture tests, and biopsies",
+            tests: "40+ tests available",
+        },
+        {
+            icon: Bone,
+            title: "Radiology",
+            description: "Bone density, mammography, specialized imaging",
+            tests: "10+ tests available",
+        },
+        {
+            icon: FileText,
+            title: "Health Packages",
+            description: "Comprehensive health checkup packages",
+            tests: "8+ packages",
+        },
+    ];
+
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
-                    Available Diagnostics Services
+        <div className="container mx-auto px-4 py-12">
+            <div className="mb-12 text-center">
+                <Badge className="mb-4" variant="outline">
+                    Coming Soon
+                </Badge>
+                <h1 className="text-4xl font-bold text-primary mb-4">
+                    Diagnostic Services
                 </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Book diagnostic tests online and get reports delivered digitally.
+                    Trusted labs, accurate results.
+                </p>
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {diagnosticCenters.map((center) => (
-                        <div key={center.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100">
-                            <div className="p-6">
-                                <div className="flex justify-between items-start">
-                                    <h2 className="text-xl font-semibold text-gray-800">{center.name}</h2>
-                                    <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2.5 py-0.5 rounded">
-                                        ★ {center.rating}
-                                    </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {services.map((service, index) => {
+                    const Icon = service.icon;
+                    return (
+                        <Card key={index} className="hover:shadow-lg transition-shadow">
+                            <CardHeader>
+                                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                                    <Icon className="h-6 w-6 text-primary" />
                                 </div>
-                                <p className="text-sm text-gray-500 mt-1 mb-4">📍 {center.location}</p>
+                                <CardTitle className="text-xl">{service.title}</CardTitle>
+                                <CardDescription>{service.description}</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Badge variant="secondary">{service.tests}</Badge>
+                            </CardContent>
+                        </Card>
+                    );
+                })}
+            </div>
 
-                                <div className="mb-4">
-                                    <h3 className="text-sm font-medium text-gray-700 mb-2">Services:</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {center.services.map((service, index) => (
-                                            <span key={index} className="bg-gray-100 text-gray-600 text-[11px] px-2 py-1 rounded-full border border-gray-200">
-                                                {service}
-                                            </span>
-                                        ))}
-                                    </div>
+            <Card className="bg-primary/5 border-primary/20 mb-12">
+                <CardContent className="p-8">
+                    <div className="max-w-3xl mx-auto">
+                        <h2 className="text-2xl font-bold mb-6 text-center">
+                            Why Choose Our Diagnostic Services?
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                                    ✓
                                 </div>
-
-                                <div className="border-t pt-4 flex items-center justify-between">
-                                    <span className="text-sm font-medium text-blue-600">{center.contact}</span>
-                                    <button className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg transition-colors">
-                                        Book Now
-                                    </button>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Accredited Labs</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Partner labs certified by national and international bodies
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                                    ✓
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Home Sample Collection</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Trained phlebotomists collect samples from your home
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                                    ✓
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Digital Reports</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Access your reports online anytime, anywhere
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                                    ✓
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Affordable Pricing</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Competitive rates with package discounts
+                                    </p>
                                 </div>
                             </div>
                         </div>
-                    ))}
-                </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <div className="text-center">
+                <Card className="inline-block">
+                    <CardContent className="p-8">
+                        <h2 className="text-2xl font-bold mb-4">Coming Soon</h2>
+                        <p className="text-muted-foreground mb-6 max-w-md">
+                            We are partnering with top diagnostic labs to bring you the best
+                            testing services. Stay tuned!
+                        </p>
+                        <Link href="/">
+                            <Button size="lg">Back to Home</Button>
+                        </Link>
+                    </CardContent>
+                </Card>
             </div>
         </div>
     );
-}
+};
+
+export default DiagnosticsPage;
