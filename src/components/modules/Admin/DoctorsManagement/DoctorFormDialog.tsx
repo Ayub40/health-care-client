@@ -41,7 +41,6 @@ const DoctorFormDialog = ({
 }: IDoctorFormDialogProps) => {
     const formRef = useRef<HTMLFormElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    // doctor thakle edit mode, na thakle create mode
     const isEdit = !!doctor;
 
     const [gender, setGender] = useState<"MALE" | "FEMALE">(
@@ -60,7 +59,7 @@ const DoctorFormDialog = ({
         null
     );
 
-    // console.log(state);
+    const prevStateRef = useRef(state);
 
     const handleClose = () => {
         if (fileInputRef.current) {
@@ -73,8 +72,6 @@ const DoctorFormDialog = ({
         onClose(); // Close dialog
     };
 
-    console.log({ state });
-
     const specialtySelection = useSpecialtySelection({
         doctor,
         isEdit,
@@ -86,7 +83,9 @@ const DoctorFormDialog = ({
     };
 
     useEffect(() => {
-        // console.log("Server Response State:", state);
+        if (state === prevStateRef.current) return;
+        prevStateRef.current = state;
+
         if (state?.success) {
             toast.success(state.message);
             if (formRef.current) {
@@ -94,7 +93,7 @@ const DoctorFormDialog = ({
             }
             onSuccess();
             onClose();
-        } else if (state && !state.success) {
+        } else if (state && !state.success && state.message) {
             toast.error(state.message);
 
             if (selectedFile && fileInputRef.current) {

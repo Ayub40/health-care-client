@@ -37,6 +37,8 @@ const AdminFormDialog = ({
         null
     );
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    // state rakhchi loop ta avoid korar jonno
+    const prevStateRef = useRef(state);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -45,6 +47,8 @@ const AdminFormDialog = ({
 
     // Handle success/error from server
     useEffect(() => {
+        if (state === prevStateRef.current) return;
+        prevStateRef.current = state;
         if (state?.success) {
             toast.success(state.message || "Operation successful");
             if (formRef.current) {
