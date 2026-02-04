@@ -1,104 +1,178 @@
-import React from "react";
-import { Heart, Globe, Users } from "lucide-react";
-import NGOList from "@/components/modules/Public/NGOList";
-import { SparkleIcon } from "@/assets/icons/SparkleIcon";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Award, Building2, Globe, HandHeart, Heart, Users } from "lucide-react";
+import Link from "next/link";
 
-export const metadata = {
-    title: "NGOs | PH Doc Healthcare Support",
-    description: "Find and connect with verified NGOs for healthcare and social support.",
+export const dynamic = "force-static";
+
+const NGOsPage = () => {
+    const ngoCategories = [
+        {
+            icon: Heart,
+            title: "Health & Wellness",
+            description:
+                "Organizations providing free medical camps and health education",
+            count: "25+ NGOs",
+        },
+        {
+            icon: HandHeart,
+            title: "Patient Support",
+            description: "Financial aid and support for critical patients",
+            count: "15+ NGOs",
+        },
+        {
+            icon: Users,
+            title: "Community Health",
+            description: "Grassroots healthcare initiatives in underserved areas",
+            count: "30+ NGOs",
+        },
+        {
+            icon: Building2,
+            title: "Medical Facilities",
+            description: "Free clinics and community hospitals",
+            count: "20+ Organizations",
+        },
+        {
+            icon: Award,
+            title: "Medical Research",
+            description: "Organizations funding medical research and innovation",
+            count: "10+ Institutions",
+        },
+        {
+            icon: Globe,
+            title: "International Aid",
+            description: "Global health organizations working in Bangladesh",
+            count: "12+ NGOs",
+        },
+    ];
+
+    return (
+        <div className="container mx-auto px-4 py-12">
+            <div className="mb-12 text-center">
+                <Badge className="mb-4" variant="outline">
+                    Coming Soon
+                </Badge>
+                <h1 className="text-4xl font-bold text-primary mb-4">
+                    Healthcare NGOs & Organizations
+                </h1>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                    Connect with healthcare NGOs providing free or subsidized medical
+                    services. Making healthcare accessible for everyone.
+                </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {ngoCategories.map((category, index) => {
+                    const Icon = category.icon;
+                    return (
+                        <Card key={index} className="hover:shadow-lg transition-shadow">
+                            <CardHeader>
+                                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                                    <Icon className="h-6 w-6 text-primary" />
+                                </div>
+                                <CardTitle className="text-xl">{category.title}</CardTitle>
+                                <CardDescription>{category.description}</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <Badge variant="secondary">{category.count}</Badge>
+                            </CardContent>
+                        </Card>
+                    );
+                })}
+            </div>
+
+            <Card className="bg-primary/5 border-primary/20 mb-12">
+                <CardContent className="p-8">
+                    <div className="max-w-3xl mx-auto">
+                        <h2 className="text-2xl font-bold mb-6 text-center">
+                            How NGO Network Helps
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold">
+                                    1
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Find Support</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Search for NGOs based on your medical needs and location
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold">
+                                    2
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Get Assistance</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Access free or subsidized healthcare services
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold">
+                                    3
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Community Programs</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Participate in health camps and awareness programs
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-3">
+                                <div className="shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-700 font-bold">
+                                    4
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold mb-1">Make a Difference</h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        Volunteer or donate to support healthcare initiatives
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card className="bg-linear-to-br from-green-50 to-blue-50 border-green-200">
+                <CardContent className="p-8 text-center">
+                    <h2 className="text-2xl font-bold mb-4">Partner With Us</h2>
+                    <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                        Are you a healthcare NGO? Register your organization to reach more
+                        people in need and make a bigger impact.
+                    </p>
+                    <Button size="lg" variant="outline">
+                        Register Your NGO
+                    </Button>
+                </CardContent>
+            </Card>
+
+            <div className="mt-12 text-center">
+                <Card className="inline-block">
+                    <CardContent className="p-8">
+                        <h2 className="text-2xl font-bold mb-4">Coming Soon</h2>
+                        <p className="text-muted-foreground mb-6 max-w-md">
+                            We are building a comprehensive directory of healthcare NGOs to
+                            connect those in need with available resources.
+                        </p>
+                        <Link href="/">
+                            <Button size="lg">Back to Home</Button>
+                        </Link>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
+    );
 };
 
-export default function NGOPage() {
-    return (
-        <main className="min-h-screen bg-white">
-           
-            <section className="w-full relative overflow-hidden rounded-b-[40px]">
-              
-                <div
-                    className="absolute inset-0 z-0"
-                    style={{
-                        background: "radial-gradient(125% 125% at 50% 90%, #fff 30%, #155DFC 100%)",
-                    }}
-                />
-
-                <div className="relative z-10 container mx-auto px-4 py-20 md:px-8 lg:px-16">
-                    <div className="max-w-[1200px] mx-auto text-center flex flex-col items-center">
-
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-3 rounded-full bg-white px-4 py-2 shadow-sm mb-6">
-                            <SparkleIcon />
-                            <span className="text-[11.9px] font-medium text-blue-700 uppercase tracking-wider">
-                                Verified Social Support
-                            </span>
-                        </div>
-
-                        {/* Heading */}
-                        <div className="space-y-2 mb-6">
-                            <h1 className="text-[40px] md:text-[51px] font-bold leading-tight text-slate-900">
-                                NGO Network &
-                            </h1>
-                            <h1 className="text-[40px] md:text-[51px] font-bold leading-tight text-slate-900">
-                                Social Support
-                            </h1>
-                        </div>
-
-                        {/* Description */}
-                        <p className="max-w-2xl text-[17px] leading-7 text-gray-600 mb-10">
-                            Find verified NGOs near you through PH Doc. We bring together organizations
-                            working in blood donation, free medical camps, and emergency relief
-                            into one seamless platform.
-                        </p>
-
-                        {/* Feature Tags */}
-                        <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-                            <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-5 py-3 rounded-2xl shadow-sm border border-blue-100">
-                                <div className="bg-blue-600 p-2 rounded-lg">
-                                    <Heart className="size-5 text-white" />
-                                </div>
-                                <span className="font-semibold text-slate-800">Blood Donation</span>
-                            </div>
-
-                            <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-5 py-3 rounded-2xl shadow-sm border border-blue-100">
-                                <div className="bg-blue-600 p-2 rounded-lg">
-                                    <Users className="size-5 text-white" />
-                                </div>
-                                <span className="font-semibold text-slate-800">Free Checkups</span>
-                            </div>
-
-                            <div className="flex items-center gap-3 bg-white/80 backdrop-blur-sm px-5 py-3 rounded-2xl shadow-sm border border-blue-100">
-                                <div className="bg-blue-600 p-2 rounded-lg">
-                                    <Globe className="size-5 text-white" />
-                                </div>
-                                <span className="font-semibold text-slate-800">Emergency Relief</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-         
-            <section className="py-12 bg-white">
-                <NGOList />
-            </section>
-
-            {/* Trust Banner */}
-            <section className="container mx-auto px-4 mb-20">
-                <div className="bg-slate-900 rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden">
-                    <div className="relative z-10">
-                        <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                            Want to list your NGO on our platform?
-                        </h2>
-                        <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
-                            Join our network and reach thousands of people who need your services.
-                            Contact us today to start the registration process.
-                        </p>
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition-all">
-                            Register Your NGO
-                        </button>
-                    </div>
-                    <div className="absolute -top-24 -right-24 size-64 bg-blue-600/20 rounded-full blur-3xl"></div>
-                </div>
-            </section>
-        </main>
-    );
-}
+export default NGOsPage;
