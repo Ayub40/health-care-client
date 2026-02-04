@@ -37,6 +37,7 @@ const AdminFormDialog = ({
         null
     );
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    // state rakhchi loop ta avoid korar jonno
     const prevStateRef = useRef(state);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
