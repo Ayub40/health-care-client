@@ -19,12 +19,9 @@ interface DashboardSidebarContentProps {
 const DashboardSidebarContent = ({
     userInfo,
     navItems,
-    dashboardHome,
+    // dashboardHome,
 }: DashboardSidebarContentProps) => {
-
-    // Get the current pathname to determine active links
     const pathname = usePathname();
-
     return (
         // Sidebar Content ta hide korate hidden use kora hoyeche md:flex diye
         <div className="hidden md:flex h-full w-64 flex-col border-r bg-card">
@@ -32,7 +29,7 @@ const DashboardSidebarContent = ({
             <div className="flex h-16 items-center border-b px-6">
                 {/* <Link href={dashboardHome} className="flex items-center space-x-2"> */}
                 <Link href="/" className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-primary">Healthcare</span>
+                    <span className="text-xl font-bold text-primary">PH Healthcare</span>
                 </Link>
             </div>
 
@@ -64,7 +61,6 @@ const DashboardSidebarContent = ({
                                         >
                                             <Icon className="h-4 w-4" />
                                             <span className="flex-1">{item.title}</span>
-                                            {/* Badge */}
                                             {item.badge && (
                                                 <Badge
                                                     variant={isActive ? "secondary" : "default"}
