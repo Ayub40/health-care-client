@@ -4,16 +4,12 @@ import { StatsCard } from "@/components/shared/StatCard";
 import { getDashboardMetaData } from "@/services/meta/dashboard.service";
 import { IDoctorDashboardMeta } from "@/types/meta.interface";
 import { Suspense } from "react";
-
-
 async function DoctorDashboardContent() {
     const result = await getDashboardMetaData();
-    console.log(result);
 
     const data: IDoctorDashboardMeta = result.data;
     // Safe access with fallback for revenue data
     const totalRevenue = data.totalRevenue?._sum?.amount || 0;
-    // console.log(totalRevenue);
 
     return (
         <div className="space-y-6">
