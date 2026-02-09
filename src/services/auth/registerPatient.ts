@@ -9,7 +9,7 @@ import { loginUser } from "./loginUser";
 
 export const registerPatient = async (_currentState: any, formData: any): Promise<any> => {
     try {
-        console.log(formData.get("address"));
+        // console.log(formData.get("address"));
         // payload deoa hocche karon "specialitiesManagement.ts" er moddhe jevabe deoa hoyche shevabe nite hobe
         const payload = {
             name: formData.get('name'),

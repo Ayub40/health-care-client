@@ -7,7 +7,7 @@ import { Suspense } from "react";
 
 const AdminSpecialitiesManagementPage = async () => {
     const result = await getSpecialities();
-    console.log(result);
+    // console.log(result);
 
     return (
         <div className="space-y-6">
