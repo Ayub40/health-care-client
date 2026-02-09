@@ -10,7 +10,7 @@ const ResetPasswordPage = async ({
 }) => {
     const params = (await searchParams) || {};
     const { redirect, email, token } = params;
-    console.log({ email, token }, "params");
+    // console.log({ email, token }, "params");
 
 
     return (

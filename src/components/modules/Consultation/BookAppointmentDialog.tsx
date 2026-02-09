@@ -67,9 +67,9 @@ export default function BookAppointmentDialog({
 
     const handleContinue = () => {
         if (selectedSchedule) {
-            console.log("Booking for doctorId:", doctor.id);
-            console.log("Booking for scheduleId:", selectedSchedule.scheduleId);
-            console.log("Redirecting to:", `/dashboard/book-appointment/${doctor.id}/${selectedSchedule.scheduleId}`);
+            // console.log("Booking for doctorId:", doctor.id);
+            // console.log("Booking for scheduleId:", selectedSchedule.scheduleId);
+            // console.log("Redirecting to:", `/dashboard/book-appointment/${doctor.id}/${selectedSchedule.scheduleId}`);
 
             router.push(
                 `/dashboard/book-appointment/${doctor.id}/${selectedSchedule.scheduleId}`
