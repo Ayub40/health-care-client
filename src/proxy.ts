@@ -15,10 +15,16 @@ export async function proxy(request: NextRequest) {
     const hasTokenRefreshedParam = request.nextUrl.searchParams.has('tokenRefreshed');
 
     // If coming back after token refresh, remove the param and continue
+
+    // if (hasTokenRefreshedParam) {
+    //     const url = request.nextUrl.clone();
+    //     url.searchParams.delete('tokenRefreshed');
+    //     return NextResponse.redirect(url);
+    // }
+
+    // If token was just refreshed, continue to original destination (with new token now in cookies)
     if (hasTokenRefreshedParam) {
-        const url = request.nextUrl.clone();
-        url.searchParams.delete('tokenRefreshed');
-        return NextResponse.redirect(url);
+        return NextResponse.next();
     }
 
     const tokenRefreshResult = await getNewAccessToken();
@@ -45,6 +51,9 @@ export async function proxy(request: NextRequest) {
         }
 
         userRole = verifiedToken.role;
+
+        // console.log("AccessToken:", accessToken);
+        // console.log("UserRole:", userRole);
     }
 
     const routerOwner = getRouteOwner(pathname);
